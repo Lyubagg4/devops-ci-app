@@ -150,6 +150,6 @@ jobs:
       - name: Check through Nginx
         run: |
           set -euo pipefail
-          response=$(curl --fail --silent --show-error "http://${VM_HOST}/health")
-          echo "${response}"
-          echo "${response}" | grep -q '"status": "ok"'
+          curl --fail --silent --show-error "http://${VM_HOST}/health" --output health.json
+          python3 -c 'import json; payload = json.load(open("health.json")); assert payload == {"status": "ok"}, payload'
+          cat health.json
